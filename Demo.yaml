@@ -1,0 +1,185 @@
+# Clash Party / Mihomo YAML 覆写
+# 设计目标：AI、大陆直连、海外媒体，以及香港/美国/台湾/日本/新加坡/其他国家手动选择。
+# 此文件会保留订阅中的 proxies 与 proxy-providers，但替换代理组和路由规则。
+
+proxy-groups:
+  - name: "🚀 节点选择"
+    type: select
+    proxies:
+      - "🇭🇰 香港"
+      - "🇺🇸 美国"
+      - "🇹🇼 台湾"
+      - "🇯🇵 日本"
+      - "🇸🇬 新加坡"
+      - "🌍 其他国家"
+      - "🌐 全部节点"
+      - DIRECT
+
+  - name: "🤖 AI"
+    type: select
+    proxies:
+      - "🇺🇸 美国"
+      - "🇸🇬 新加坡"
+      - "🇯🇵 日本"
+      - "🇹🇼 台湾"
+      - "🇭🇰 香港"
+      - "🌍 其他国家"
+      - "🚀 节点选择"
+      - DIRECT
+
+  - name: "🎬 海外媒体"
+    type: select
+    proxies:
+      - "🚀 节点选择"
+      - "🇭🇰 香港"
+      - "🇺🇸 美国"
+      - "🇹🇼 台湾"
+      - "🇯🇵 日本"
+      - "🇸🇬 新加坡"
+      - "🌍 其他国家"
+      - DIRECT
+
+  - name: "🇨🇳 大陆直连"
+    type: select
+    proxies:
+      - DIRECT
+      - "🚀 节点选择"
+
+  - name: "🐟 漏网之鱼"
+    type: select
+    proxies:
+      - "🚀 节点选择"
+      - "🇭🇰 香港"
+      - "🇺🇸 美国"
+      - "🇹🇼 台湾"
+      - "🇯🇵 日本"
+      - "🇸🇬 新加坡"
+      - "🌍 其他国家"
+      - DIRECT
+
+  - name: "🇭🇰 香港"
+    type: select
+    include-all: true
+    filter: '(?i)(香港|Hong\s*Kong|\bHK\b|🇭🇰)'
+
+  - name: "🇺🇸 美国"
+    type: select
+    include-all: true
+    filter: '(?i)(美国|美國|United\s*States|\bUSA?\b|洛杉矶|洛杉磯|西雅图|西雅圖|纽约|紐約|硅谷|矽谷|圣何塞|聖荷西|达拉斯|達拉斯|芝加哥|🇺🇸)'
+
+  - name: "🇹🇼 台湾"
+    type: select
+    include-all: true
+    filter: '(?i)(台湾|台灣|Taiwan|\bTW\b|台北|新北|彰化|高雄|🇹🇼)'
+
+  - name: "🇯🇵 日本"
+    type: select
+    include-all: true
+    filter: '(?i)(日本|Japan|\bJP\b|东京|東京|大阪|埼玉|川日|泉日|🇯🇵)'
+
+  - name: "🇸🇬 新加坡"
+    type: select
+    include-all: true
+    filter: '(?i)(新加坡|Singapore|\bSG\b|\bSIN\b|狮城|獅城|坡|🇸🇬)'
+
+  - name: "🌍 其他国家"
+    type: select
+    include-all: true
+    exclude-filter: '(?i)(香港|Hong\s*Kong|\bHK\b|🇭🇰|美国|美國|United\s*States|\bUSA?\b|洛杉矶|洛杉磯|西雅图|西雅圖|纽约|紐約|硅谷|矽谷|圣何塞|聖荷西|达拉斯|達拉斯|芝加哥|🇺🇸|台湾|台灣|Taiwan|\bTW\b|台北|新北|彰化|高雄|🇹🇼|日本|Japan|\bJP\b|东京|東京|大阪|埼玉|川日|泉日|🇯🇵|新加坡|Singapore|\bSG\b|\bSIN\b|狮城|獅城|坡|🇸🇬)'
+
+  - name: "🌐 全部节点"
+    type: select
+    include-all: true
+
+rules:
+  # 局域网与保留地址
+  - IP-CIDR,127.0.0.0/8,🇨🇳 大陆直连,no-resolve
+  - IP-CIDR,10.0.0.0/8,🇨🇳 大陆直连,no-resolve
+  - IP-CIDR,172.16.0.0/12,🇨🇳 大陆直连,no-resolve
+  - IP-CIDR,192.168.0.0/16,🇨🇳 大陆直连,no-resolve
+  - IP-CIDR,169.254.0.0/16,🇨🇳 大陆直连,no-resolve
+  - IP-CIDR6,::1/128,🇨🇳 大陆直连,no-resolve
+  - IP-CIDR6,fc00::/7,🇨🇳 大陆直连,no-resolve
+  - IP-CIDR6,fe80::/10,🇨🇳 大陆直连,no-resolve
+
+  # AI：OpenAI / Claude / Gemini / Grok / Perplexity / Copilot / Poe 等
+  - DOMAIN-SUFFIX,openai.com,🤖 AI
+  - DOMAIN-SUFFIX,chatgpt.com,🤖 AI
+  - DOMAIN-SUFFIX,oaistatic.com,🤖 AI
+  - DOMAIN-SUFFIX,oaiusercontent.com,🤖 AI
+  - DOMAIN-SUFFIX,sora.com,🤖 AI
+  - DOMAIN-SUFFIX,anthropic.com,🤖 AI
+  - DOMAIN-SUFFIX,claude.ai,🤖 AI
+  - DOMAIN-SUFFIX,claude.com,🤖 AI
+  - DOMAIN-SUFFIX,claudeusercontent.com,🤖 AI
+  - DOMAIN-SUFFIX,gemini.google.com,🤖 AI
+  - DOMAIN-SUFFIX,aistudio.google.com,🤖 AI
+  - DOMAIN-SUFFIX,ai.google.dev,🤖 AI
+  - DOMAIN-SUFFIX,generativelanguage.googleapis.com,🤖 AI
+  - DOMAIN-SUFFIX,deepmind.com,🤖 AI
+  - DOMAIN-SUFFIX,deepmind.google,🤖 AI
+  - DOMAIN-SUFFIX,x.ai,🤖 AI
+  - DOMAIN-SUFFIX,grok.com,🤖 AI
+  - DOMAIN-SUFFIX,perplexity.ai,🤖 AI
+  - DOMAIN-SUFFIX,poe.com,🤖 AI
+  - DOMAIN-SUFFIX,cerebras.ai,🤖 AI
+  - DOMAIN-SUFFIX,recraft.ai,🤖 AI
+  - DOMAIN-SUFFIX,githubcopilot.com,🤖 AI
+  - DOMAIN-SUFFIX,copilot.microsoft.com,🤖 AI
+  - DOMAIN-SUFFIX,api.githubcopilot.com,🤖 AI
+  - DOMAIN-SUFFIX,cursor.com,🤖 AI
+  - DOMAIN-SUFFIX,cursor.sh,🤖 AI
+
+  # 海外流媒体与音乐
+  - DOMAIN-SUFFIX,youtube.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,youtu.be,🎬 海外媒体
+  - DOMAIN-SUFFIX,googlevideo.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,ytimg.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,youtube-nocookie.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,netflix.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,netflix.net,🎬 海外媒体
+  - DOMAIN-SUFFIX,nflxext.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,nflximg.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,nflximg.net,🎬 海外媒体
+  - DOMAIN-SUFFIX,nflxso.net,🎬 海外媒体
+  - DOMAIN-SUFFIX,nflxvideo.net,🎬 海外媒体
+  - DOMAIN-SUFFIX,disneyplus.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,disney-plus.net,🎬 海外媒体
+  - DOMAIN-SUFFIX,disneystreaming.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,dssott.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,bamgrid.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,hbo.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,hbomax.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,hbomaxcdn.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,max.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,hulu.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,hulustream.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,primevideo.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,amazonvideo.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,spotify.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,spotifycdn.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,scdn.co,🎬 海外媒体
+  - DOMAIN-SUFFIX,pscdn.co,🎬 海外媒体
+  - DOMAIN-SUFFIX,twitch.tv,🎬 海外媒体
+  - DOMAIN-SUFFIX,ttvnw.net,🎬 海外媒体
+  - DOMAIN-SUFFIX,tiktok.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,tiktokcdn.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,tiktokv.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,bahamut.com.tw,🎬 海外媒体
+  - DOMAIN-SUFFIX,gamer.com.tw,🎬 海外媒体
+  - DOMAIN-SUFFIX,bilibili.tv,🎬 海外媒体
+  - DOMAIN-SUFFIX,viu.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,viu.tv,🎬 海外媒体
+  - DOMAIN-SUFFIX,mytvsuper.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,tvb.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,abema.tv,🎬 海外媒体
+  - DOMAIN-SUFFIX,abema.io,🎬 海外媒体
+  - DOMAIN-SUFFIX,dazn.com,🎬 海外媒体
+  - DOMAIN-SUFFIX,dazn-api.com,🎬 海外媒体
+
+  # 中国大陆域名和 IP 直连；依赖 Mihomo 的 GeoSite/GeoIP 数据库
+  - GEOSITE,cn,🇨🇳 大陆直连
+  - GEOIP,CN,🇨🇳 大陆直连,no-resolve
+
+  # 其余流量交给用户选择
+  - MATCH,🐟 漏网之鱼
